@@ -38,9 +38,19 @@ local Window = Rayfield:CreateWindow({
 }) 
 local mainTab = Window:CreateTab("🏡Home", 4483362458) -- Title, Image
 local MainSection MainTab: CreateSection("Main")|
+
 Rayfield:Notify({
-   Title = "Notification Title",
-   Content = "Notification Content",
-   Duration = 6.5,
-   Image = 4483362458,
-})
+Title "You executed the script!",
+Content "very good gui",
+Duration 5,
+Image nil,
+Actions { Notification Buttons
+Ignore {
+Name "Okay!",
+
+Callback function()
+
+print("The user tapped Okay!")
+end
+},
+
