@@ -53,6 +53,5 @@ Callback function()
 print("The user tapped Okay!")
 end
 
-         
-         },
+         }},
 
