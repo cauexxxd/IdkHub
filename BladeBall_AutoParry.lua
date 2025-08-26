@@ -1,5 +1,3 @@
--- AutoParry Blade Ball - by idk
--- Funciona no Arceus Executor
 
 local delayParry = 0.05 -- tempo antes de parry (em segundos)
 local toggleKey = Enum.KeyCode.P -- tecla para ligar/desligar
