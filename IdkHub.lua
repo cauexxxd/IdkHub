@@ -38,29 +38,3 @@ local Window = Rayfield:CreateWindow({
 }) 
 local mainTab = Window:CreateTab("🏡Home", 4483362458) -- Title, Image
 local MainSection MainTab: CreateSection("Main")
-local player = game.Players.LocalPlayer
-
-function autoParry()
-    -- Exemplo genérico: verifica se o player está prestes a ser atacado
-    local char = player.Character
-    if not char then return end
-
-    local humanoid = char:FindFirstChildOfClass("Humanoid")
-    if humanoid and humanoid.Health > 0 then
-        -- Procura por ataques próximos (substitua por lógica específica do jogo)
-        for _, v in pairs(workspace:GetChildren()) do
-            if v:IsA("Part") and v.Name == "AttackHitbox" and (v.Position - char.HumanoidRootPart.Position).Magnitude < 10 then
-                -- Executa parry (substitua pelo método correto do jogo)
-                game:GetService("ReplicatedStorage").RemoteEvent:FireServer("Parry")
-                print("AutoParry ativado!")
-            end
-        end
-    end
-end
-
--- Loop para verificar constantemente
-while true do
-    pcall(autoParry)
-    wait(0.1)
-end
-
