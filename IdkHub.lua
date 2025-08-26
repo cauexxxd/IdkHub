@@ -37,3 +37,32 @@ local Window = Rayfield:CreateWindow({
    }
 }) 
 local mainTab = Window:CreateTab("🏡Home", 4483362458) -- Title, Image
+-- Exemplo educativo (Roblox Studio)
+-- Auto Defender: quando um objeto "Bola" chega perto, ativa defesa
+
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoidRoot = character:WaitForChild("HumanoidRootPart")
+
+local defenseActive = false
+
+local function defend()
+    if not defenseActive then
+        defenseActive = true
+        print("Defesa automática ativada!")
+        -- aqui você pode animar o personagem ou mudar cor da bola
+        wait(0.3) -- tempo de defesa
+        defenseActive = false
+    end
+end
+
+-- Detecta quando uma bola encosta no jogador
+workspace.ChildAdded:Connect(function(obj)
+    if obj.Name == "Bola" and obj:IsA("Part") then
+        obj.Touched:Connect(function(hit)
+            if hit == humanoidRoot then
+                defend()
+            end
+        end)
+    end
+end)
