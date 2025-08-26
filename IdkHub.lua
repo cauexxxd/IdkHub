@@ -36,7 +36,7 @@ local Window = Rayfield:CreateWindow({
       Key = {"Hello"} -- List of keys that will be accepted by the system, can be RAW file links (pastebin, github etc) or simple strings ("hello","key22")
    }
 }) 
-local mainTab = Window:CreateTab("🏡Home", 4483362458) -- Title, Image
+local mainTab = Window:CreateTab("🏡Home",nil) -- Title, Image
 local MainSection MainTab: CreateSection("Main")|
 
 Rayfield:Notify({
