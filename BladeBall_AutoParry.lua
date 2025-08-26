@@ -1,3 +1,4 @@
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local delayParry = 0.05 -- tempo antes de parry (em segundos)
 local toggleKey = Enum.KeyCode.P -- tecla para ligar/desligar
