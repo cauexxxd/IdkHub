@@ -39,3 +39,11 @@ local Window = Rayfield:CreateWindow({
 }) 
 local mainTab = Window:CreateTab("🏡Home", 4483362458) -- Title, Image
 local MainSection MainTab: CreateSection("Main") 
+
+
+Rayfield:Notify({
+   Title = "Notification Title",
+   Content = "Notification Content",
+   Duration = 6.5,
+   Image = 4483362458,
+})
