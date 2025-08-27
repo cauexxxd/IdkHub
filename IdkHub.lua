@@ -20,7 +20,7 @@ local spamSpeed = 0.2
 local parryDist = 30
 local autoAbility = false
 
--- FUNÇÃO AUTOPARRY
+-- FUNÇÃO AUTOPARRY (detecta múltiplos PixelKillEvent)
 function AutoParryFunc()
     while autoParry do
         pcall(function()
@@ -28,7 +28,7 @@ function AutoParryFunc()
             local char = player.Character
             if char and char:FindFirstChild("HumanoidRootPart") then
                 for _, ball in ipairs(workspace:GetChildren()) do
-                    if ball.Name == "Ball" and ball:FindFirstChild("BodyVelocity") then
+                    if ball.Name == "PixelKillEvent" and ball:IsA("BasePart") then
                         local dist = (char.HumanoidRootPart.Position - ball.Position).Magnitude
                         if dist < parryDist then
                             game:GetService("ReplicatedStorage").Remotes.Parry:FireServer()
