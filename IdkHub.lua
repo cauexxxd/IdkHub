@@ -1,5 +1,4 @@
-if game.Placeld  then
-local Rayfield ==4777817887
+
  loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 local Window = Rayfield:CreateWindow({
    Name = "idk Hub",
