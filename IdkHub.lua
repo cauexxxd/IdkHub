@@ -122,40 +122,25 @@ do
             if not part or not part.Parent then tracked[part] = nil end  
         end  
     end)
-end
+end 
 
--- AutoSpam
-task.spawn(function()
-    while true do
-        if autoSpam then
-            _G.PerformParry({ source = "KatanaMesh" })
-            AddLog("⚔️ AutoSpam na KatanaMesh")
-            task.wait(spamSpeed)
-        else
-            task.wait(0.2)
-        end
-    end
+-- ServerScriptService
+local RS = game:GetService("ReplicatedStorage")
+
+local ParryEvent = Instance.new("RemoteEvent")
+ParryEvent.Name = "ParryEvent"
+ParryEvent.Parent = RS
+
+local AbilityEvent = Instance.new("RemoteEvent")
+AbilityEvent.Name = "AbilityEvent"
+AbilityEvent.Parent = RS
+
+ParryEvent.OnServerEvent:Connect(function(player, ctx)
+    print(player.Name.." fez PARRY! Info:", ctx)
+    -- aqui você faz a defesa real: cancelar/repelir bola
 end)
 
--- ⚡ Speed & Jump (para cenas do filme)
-RunService.Heartbeat:Connect(function()
-    if player.Character and player.Character:FindFirstChild("Humanoid") then
-        local hum = player.Character:FindFirstChild("Humanoid")
-        hum.WalkSpeed = walkSpeed
-        hum.JumpPower = jumpPower
-    end
+AbilityEvent.OnServerEvent:Connect(function(player, ctx)
+    print(player.Name.." usou ABILITY! Info:", ctx)
+    -- lógica da habilidade
 end)
-
--- 🖥️ UI
-mainTab:CreateToggle({ Name = "AutoParry Inteligente (SIM)", CurrentValue = false, Callback = function(v) autoParry=v AddLog("AutoParry "..(v and "✅" or "❌")) end })
-mainTab:CreateToggle({ Name = "Auto Ability (SIM)", CurrentValue = false, Callback = function(v) autoAbility=v AddLog("AutoAbility "..(v and "✅" or "❌")) end })
-mainTab:CreateToggle({ Name = "Auto Spam (SIM)", CurrentValue = false, Callback = function(v) autoSpam=v AddLog("AutoSpam "..(v and "✅" or "❌")) end })
-
-mainTab:CreateSlider({ Name = "Spam Speed", Range = {0.05,1}, Increment = 0.05, CurrentValue = spamSpeed, Callback = function(v) spamSpeed=v AddLog("SpamSpeed="..v) end })
-mainTab:CreateSlider({ Name = "Parry Distance", Range = {8,60}, Increment = 1, CurrentValue = parryDist, Callback = function(v) parryDist=v AddLog("ParryDist="..v) end })
-
-mainTab:CreateSlider({ Name = "⚡ Speed", Range = {16,200}, Increment = 1, CurrentValue = defaultWalk, Callback = function(v) walkSpeed=v AddLog("⚡ Speed="..v) end })
-mainTab:CreateSlider({ Name = "🦘 Jump", Range = {50,300}, Increment = 5, CurrentValue = defaultJump, Callback = function(v) jumpPower=v AddLog("🦘 Jump="..v) end })
-
-mainTab:CreateToggle({ Name = "Auto Golden Ball (SIM)", CurrentValue = false, Callback = function(v) AddLog("AutoGoldenBall "..(v and "✅" or "❌")) end })
-mainTab:CreateButton({ Name = "Spam Manual (SIM)", Callback = function() _G.PerformParry({ source = "KatanaMesh" }) AddLog("⚔️ Spam Manual na KatanaMesh") end })
