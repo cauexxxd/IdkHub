@@ -19,6 +19,7 @@ local autoSpam = false
 local spamSpeed = 0.2
 local parryDist = 30
 local autoAbility = false
+local autoGoldenBall = false
 
 -- FUNÇÃO AUTOPARRY (detecta múltiplos PixelKillEvent)
 function AutoParryFunc()
@@ -63,6 +64,35 @@ function AutoAbilityFunc()
             game:GetService("ReplicatedStorage").Remotes.Ability:FireServer()
         end)
         task.wait(1)
+    end
+end
+
+-- FUNÇÃO AUTO GOLDEN BALL
+function AutoGoldenBallFunc()
+    while autoGoldenBall do
+        pcall(function()
+            local player = game.Players.LocalPlayer
+            local char = player.Character
+            if char and char:FindFirstChild("Abilities") then
+                local goldenBall = char.Abilities:FindFirstChild("Golden Ball")
+                if goldenBall then
+                    game:GetService("ReplicatedStorage").Remotes.Ability:FireServer()
+                end
+            end
+        end)
+        task.wait(2) -- tempo entre usos automáticos
+    end
+end
+
+-- FUNÇÃO USAR GOLDEN BALL MANUAL
+function UseGoldenBall()
+    local player = game.Players.LocalPlayer
+    local char = player.Character
+    if char and char:FindFirstChild("Abilities") then
+        local goldenBall = char.Abilities:FindFirstChild("Golden Ball")
+        if goldenBall then
+            game:GetService("ReplicatedStorage").Remotes.Ability:FireServer()
+        end
     end
 end
 
@@ -124,4 +154,21 @@ mainTab:CreateToggle({
             spawn(AutoAbilityFunc)
         end
     end
+})
+
+-- Golden Ball UI
+mainTab:CreateToggle({
+    Name = "Auto Golden Ball",
+    CurrentValue = false,
+    Callback = function(Value)
+        autoGoldenBall = Value
+        if Value then
+            spawn(AutoGoldenBallFunc)
+        end
+    end
+})
+
+mainTab:CreateButton({
+    Name = "Usar Golden Ball (Manual)",
+    Callback = UseGoldenBall
 })
