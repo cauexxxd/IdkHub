@@ -1,4 +1,4 @@
--- Carrega Rayfield UI
+-- 🔥 Carrega Rayfield UI
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local Window = Rayfield:CreateWindow({
@@ -13,7 +13,7 @@ local Window = Rayfield:CreateWindow({
 
 local mainTab = Window:CreateTab("🏡 Home", 4483362458)
 
--- VARIÁVEIS
+-- 📌 VARIÁVEIS
 local autoParry = false
 local autoSpam = false
 local spamSpeed = 0.2
@@ -21,18 +21,36 @@ local parryDist = 30
 local autoAbility = false
 local autoGoldenBall = false
 
--- FUNÇÃO AUTOPARRY (detecta múltiplos PixelKillEvent)
+-- ✅ Remote fixo para Parry
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Remotes = ReplicatedStorage:WaitForChild("Remotes")
+local ParryRemote = Remotes:WaitForChild("ParryAttempt")
+
+-- ✅ Remote opcional para Ability (filtragem melhorada)
+local AbilityRemote = nil
+for _, obj in ipairs(game:GetDescendants()) do
+    if obj:IsA("RemoteEvent") then
+        local lowerName = string.lower(obj.Name)
+        if lowerName == "ability" or lowerName == "useability" or lowerName == "abilityused" then
+            warn("✅ AbilityRemote encontrado:", obj:GetFullName())
+            AbilityRemote = obj
+            break
+        end
+    end
+end
+
+-- ⚔️ FUNÇÃO AUTOPARRY
 function AutoParryFunc()
     while autoParry do
         pcall(function()
             local player = game.Players.LocalPlayer
             local char = player.Character
-            if char and char:FindFirstChild("HumanoidRootPart") then
+            if char and char:FindFirstChild("HumanoidRootPart") and ParryRemote then
                 for _, ball in ipairs(workspace:GetChildren()) do
-                    if ball.Name == "PixelKillEvent" and ball:IsA("BasePart") then
+                    if ball:IsA("BasePart") and string.find(string.lower(ball.Name), "ball") then
                         local dist = (char.HumanoidRootPart.Position - ball.Position).Magnitude
                         if dist < parryDist then
-                            game:GetService("ReplicatedStorage").Remotes.Parry:FireServer()
+                            ParryRemote:FireServer()
                         end
                     end
                 end
@@ -42,62 +60,67 @@ function AutoParryFunc()
     end
 end
 
--- FUNÇÃO AUTOSPAM
+-- 🔁 FUNÇÃO AUTOSPAM
 function AutoSpamFunc()
     while autoSpam do
         pcall(function()
-            game:GetService("ReplicatedStorage").Remotes.Parry:FireServer()
+            if ParryRemote then
+                ParryRemote:FireServer()
+            end
         end)
         task.wait(spamSpeed)
     end
 end
 
--- FUNÇÃO SPAM MANUAL
+-- 🔘 FUNÇÃO SPAM MANUAL
 function ManualSpamFunc()
-    game:GetService("ReplicatedStorage").Remotes.Parry:FireServer()
+    if ParryRemote then
+        ParryRemote:FireServer()
+    end
 end
 
--- FUNÇÃO AUTOABILITY
+-- ⭐ FUNÇÃO AUTOABILITY
 function AutoAbilityFunc()
     while autoAbility do
         pcall(function()
-            game:GetService("ReplicatedStorage").Remotes.Ability:FireServer()
+            if AbilityRemote then
+                AbilityRemote:FireServer()
+            end
         end)
         task.wait(1)
     end
 end
 
--- FUNÇÃO AUTO GOLDEN BALL
+-- 🟡 FUNÇÃO AUTO GOLDEN BALL
 function AutoGoldenBallFunc()
     while autoGoldenBall do
         pcall(function()
             local player = game.Players.LocalPlayer
             local char = player.Character
-            if char and char:FindFirstChild("Abilities") then
+            if char and char:FindFirstChild("Abilities") and AbilityRemote then
                 local goldenBall = char.Abilities:FindFirstChild("Golden Ball")
                 if goldenBall then
-                    game:GetService("ReplicatedStorage").Remotes.Ability:FireServer()
+                    AbilityRemote:FireServer()
                 end
             end
         end)
-        task.wait(2) -- tempo entre usos automáticos
+        task.wait(2)
     end
 end
 
--- FUNÇÃO USAR GOLDEN BALL MANUAL
+-- 🟡 FUNÇÃO USAR GOLDEN BALL MANUAL
 function UseGoldenBall()
     local player = game.Players.LocalPlayer
     local char = player.Character
-    if char and char:FindFirstChild("Abilities") then
+    if char and char:FindFirstChild("Abilities") and AbilityRemote then
         local goldenBall = char.Abilities:FindFirstChild("Golden Ball")
         if goldenBall then
-            game:GetService("ReplicatedStorage").Remotes.Ability:FireServer()
+            AbilityRemote:FireServer()
         end
     end
 end
 
--- UI Rayfield
-
+-- 📂 UI Rayfield
 mainTab:CreateToggle({
     Name = "AutoParry",
     CurrentValue = false,
@@ -156,7 +179,6 @@ mainTab:CreateToggle({
     end
 })
 
--- Golden Ball UI
 mainTab:CreateToggle({
     Name = "Auto Golden Ball",
     CurrentValue = false,
