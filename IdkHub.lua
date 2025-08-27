@@ -50,7 +50,7 @@ Rayfield:Notify({
 
 
 local Button = Tab:CreateButton({
-   Name = "Button Example",
+   Name = "Infinite Jump",
    Callback = function()
    -- The function that takes place when the button is pressed
    end,
