@@ -1,3 +1,4 @@
+-- Carrega Rayfield UI
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local Window = Rayfield:CreateWindow({
@@ -10,27 +11,26 @@ local Window = Rayfield:CreateWindow({
    ToggleUIKeybind = "K",
 })
 
-local mainTab = Window:CreateTab("🏡Home", 4483362458)
+local mainTab = Window:CreateTab("🏡 Home", 4483362458)
 
--- Variáveis
+-- VARIÁVEIS
 local autoParry = false
 local autoSpam = false
-local spamSpeed = 0.5
+local spamSpeed = 0.2
 local parryDist = 30
 local autoAbility = false
 
--- Função AutoParry
+-- FUNÇÃO AUTOPARRY
 function AutoParryFunc()
     while autoParry do
         pcall(function()
             local player = game.Players.LocalPlayer
             local char = player.Character
             if char and char:FindFirstChild("HumanoidRootPart") then
-                for _, ball in pairs(workspace:GetChildren()) do
-                    if ball.Name == "Ball" and ball:FindFirstChild("Velocity") then
+                for _, ball in ipairs(workspace:GetChildren()) do
+                    if ball.Name == "Ball" and ball:FindFirstChild("BodyVelocity") then
                         local dist = (char.HumanoidRootPart.Position - ball.Position).Magnitude
                         if dist < parryDist then
-                            -- Parry remoto do Blade Ball
                             game:GetService("ReplicatedStorage").Remotes.Parry:FireServer()
                         end
                     end
@@ -41,7 +41,7 @@ function AutoParryFunc()
     end
 end
 
--- Função AutoSpam
+-- FUNÇÃO AUTOSPAM
 function AutoSpamFunc()
     while autoSpam do
         pcall(function()
@@ -51,12 +51,12 @@ function AutoSpamFunc()
     end
 end
 
--- Função Manual Spam
+-- FUNÇÃO SPAM MANUAL
 function ManualSpamFunc()
     game:GetService("ReplicatedStorage").Remotes.Parry:FireServer()
 end
 
--- Função AutoAbility
+-- FUNÇÃO AUTOABILITY
 function AutoAbilityFunc()
     while autoAbility do
         pcall(function()
@@ -66,7 +66,7 @@ function AutoAbilityFunc()
     end
 end
 
--- UI Rayfield Toggles/Sliders/Buttons
+-- UI Rayfield
 
 mainTab:CreateToggle({
     Name = "AutoParry",
@@ -92,7 +92,7 @@ mainTab:CreateToggle({
 
 mainTab:CreateSlider({
     Name = "Spam Speed (menor = mais rápido)",
-    Range = {0.05, 2},
+    Range = {0.05, 1},
     Increment = 0.05,
     CurrentValue = spamSpeed,
     Callback = function(Value)
@@ -107,7 +107,7 @@ mainTab:CreateButton({
 
 mainTab:CreateSlider({
     Name = "Parry Accuracy (distância)",
-    Range = {5, 50},
+    Range = {10, 50},
     Increment = 1,
     CurrentValue = parryDist,
     Callback = function(Value)
