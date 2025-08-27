@@ -55,3 +55,46 @@ local Button = Tab:CreateButton({
     
    end,
 })
+
+
+G.infinjump not 6.infinjump
+
+if G.infinJumpStarted nil then
+
+--Ensures this only runs once to save resources
+
+G.infinJumpStarted = true
+
+--Notifies readiness
+
+game.StarterGui: SetCore("SendNotification", {Title="Youtube Hub"; Te
+
+--The actual infinite jump Jump
+
+local plr game: GetService('Players'). LocalPlayer local m plr:GetMouse()
+
+m.KeyDown:connect(function(k)
+
+if G.infinjump then
+
+if k:byte() 32 then
+
+humanoid game: GetService Players'. LocalPlayer.Character: Fi
+
+humanoid: ChangeState('Jumping')
+
+wait()
+
+humanoid: ChangeState('Seated')
+
+end
+
+end
+
+end)
+
+end
+
+end,
+
+})
