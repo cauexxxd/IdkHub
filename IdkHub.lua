@@ -41,7 +41,7 @@ local MainSection MainTab: CreateSection("Main")
 
 Rayfield: Notify({
 
-Title "You executed the script!",
+Title = "You executed the script!",
 
 Content "very good gui",
 
@@ -53,7 +53,7 @@ Actions { Notification Buttons
 
 Ignore = {
 
-Name "Okay!",
+Name = "Okay!",
 
 Callback function()
 
@@ -62,7 +62,3 @@ print("The user tapped Okay!")
 end
 
 },
-
-},
-
-})
