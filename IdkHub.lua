@@ -43,7 +43,7 @@ local MainSection MainTab: CreateSection("Main")
 
 Rayfield:Notify({
    Title = "You executed the script",
-   Content = "Notification Content",
+   Content = "oky",
    Duration = 6.5,
-   Image = 4483362458,
+   Image = nil,
 })
