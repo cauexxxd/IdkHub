@@ -36,6 +36,33 @@ local Window = Rayfield:CreateWindow({
       Key = {"Hello"} -- List of keys that will be accepted by the system, can be RAW file links (pastebin, github etc) or simple strings ("hello","key22")
    }
 }) 
-local mainTab = Window:CreateTab("🏡Home"nil,) -- Title, Image
-local MainSection MainTab: CreateSection("Main")
+local mainTab = Window:CreateTab("🏡Home", 4483362458) -- Title, Image
+local MainSection MainTab: CreateSection("Main") 
 
+Rayfield: Notify({
+
+Title "You executed the script!",
+
+Content "very good gui",
+
+Duration 5,
+
+Image nil,
+
+Actions { Notification Buttons
+
+Ignore = {
+
+Name "Okay!",
+
+Callback function()
+
+print("The user tapped Okay!")
+
+end
+
+},
+
+},
+
+})
