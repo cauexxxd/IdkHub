@@ -1,4 +1,3 @@
-
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local Window = Rayfield:CreateWindow({
@@ -38,5 +37,3 @@ local Window = Rayfield:CreateWindow({
    }
 }) 
 local mainTab = Window:CreateTab("🏡Home", 4483362458) -- Title, Image
-local MainSection MainTab: CreateSection("Main") 
-
