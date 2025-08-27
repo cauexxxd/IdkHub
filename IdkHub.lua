@@ -1,6 +1,6 @@
 -- ⚔️ Blade Ball Hub (SAFE & DEBUG)
 -- by cauezin (adaptado para "KatanaMesh")
--- 🔒 Versão segura: NÃO chama RemoteEvent real
+-- 🔒 Versão segura: NÃO chama RemoteEvent real (apenas simulação para filme)
 
 -- Carrega Rayfield UI
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
@@ -12,11 +12,14 @@ local Window = Rayfield:CreateWindow({
 })
 local mainTab = Window:CreateTab("🏡 Home", 4483362458)
 
--- Configurações
+-- Configurações iniciais
 local autoParry, autoAbility, autoSpam = false, false, false
 local spamSpeed, parryDist = 0.2, 30
 local detectionInterval, minProjectileSpeed = 0.06, 3
 local maxLeadTime, globalParryCooldown, perProjectileCooldown = 1.2, 0.6, 1.2
+
+local defaultWalk, defaultJump = 16, 50
+local walkSpeed, jumpPower = defaultWalk, defaultJump
 
 local Players, RunService = game:GetService("Players"), game:GetService("RunService")
 local player = Players.LocalPlayer
@@ -34,7 +37,7 @@ local function AddLog(msg)
     LogBox:Set(LogText)
 end
 
--- Placeholders (não chama nada real do servidor)
+-- Placeholders (simulação, não envia nada real)
 _G.PerformParry = _G.PerformParry or function(ctx)
     AddLog("⚔️ [SIM] Parry na bola KatanaMesh")
     Rayfield:Notify({ Title = "⚔️ Parry (SIM)", Content = "KatanaMesh", Duration = 1.5 })
@@ -54,7 +57,7 @@ local function getVelocity(part)
     return part.Velocity
 end
 
--- Reconhece a bola real pelo nome "KatanaMesh"
+-- Reconhece a bola pelo nome KatanaMesh
 local function isProjectilePart(p)
     if not p or not p:IsA("BasePart") then return false end
     if p.Name == "KatanaMesh" then return true end
@@ -84,7 +87,7 @@ local function shouldTriggerForPart(part, hrpPos)
     return true, tClosest, distClosest, speed
 end
 
--- Loop principal
+-- Loop principal inteligente
 do
     local acc = 0
     RunService.Heartbeat:Connect(function(dt)
@@ -134,11 +137,25 @@ task.spawn(function()
     end
 end)
 
--- UI
+-- ⚡ Speed & Jump (para cenas do filme)
+RunService.Heartbeat:Connect(function()
+    if player.Character and player.Character:FindFirstChild("Humanoid") then
+        local hum = player.Character:FindFirstChild("Humanoid")
+        hum.WalkSpeed = walkSpeed
+        hum.JumpPower = jumpPower
+    end
+end)
+
+-- 🖥️ UI
 mainTab:CreateToggle({ Name = "AutoParry Inteligente (SIM)", CurrentValue = false, Callback = function(v) autoParry=v AddLog("AutoParry "..(v and "✅" or "❌")) end })
 mainTab:CreateToggle({ Name = "Auto Ability (SIM)", CurrentValue = false, Callback = function(v) autoAbility=v AddLog("AutoAbility "..(v and "✅" or "❌")) end })
 mainTab:CreateToggle({ Name = "Auto Spam (SIM)", CurrentValue = false, Callback = function(v) autoSpam=v AddLog("AutoSpam "..(v and "✅" or "❌")) end })
+
 mainTab:CreateSlider({ Name = "Spam Speed", Range = {0.05,1}, Increment = 0.05, CurrentValue = spamSpeed, Callback = function(v) spamSpeed=v AddLog("SpamSpeed="..v) end })
 mainTab:CreateSlider({ Name = "Parry Distance", Range = {8,60}, Increment = 1, CurrentValue = parryDist, Callback = function(v) parryDist=v AddLog("ParryDist="..v) end })
+
+mainTab:CreateSlider({ Name = "⚡ Speed", Range = {16,200}, Increment = 1, CurrentValue = defaultWalk, Callback = function(v) walkSpeed=v AddLog("⚡ Speed="..v) end })
+mainTab:CreateSlider({ Name = "🦘 Jump", Range = {50,300}, Increment = 5, CurrentValue = defaultJump, Callback = function(v) jumpPower=v AddLog("🦘 Jump="..v) end })
+
 mainTab:CreateToggle({ Name = "Auto Golden Ball (SIM)", CurrentValue = false, Callback = function(v) AddLog("AutoGoldenBall "..(v and "✅" or "❌")) end })
 mainTab:CreateButton({ Name = "Spam Manual (SIM)", Callback = function() _G.PerformParry({ source = "KatanaMesh" }) AddLog("⚔️ Spam Manual na KatanaMesh") end })
