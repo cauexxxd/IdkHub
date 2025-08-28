@@ -32,7 +32,7 @@ local function onCharacterAdded(char)
     -- Prepara a animação de parry uma única vez
     local parryAnim = Instance.new("Animation")
     parryAnim.Name = "AutoParryAnim"
-    parryAnim.AnimationId = "rbxassetid://SEU_ANIMATION_ID_AQUI" -- coloque o ID correto
+    parryAnim.AnimationId = "rbxassetid://78457300760462" -- ID da animação que você passou
     -- carrega mas não reproduz ainda
     if humanoid then
         -- evita carregar múltiplas vezes
