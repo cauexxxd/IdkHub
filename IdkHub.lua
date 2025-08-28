@@ -12,236 +12,71 @@ local Window = Rayfield:CreateWindow({
 })
 local mainTab = Window:CreateTab("🏡 Home", 4483362458)
 
--- Configurações
-local settings = {
-    autoParry = true,
-    autoBlock = true,
-    perfectBlock = true,
-    spamHit = true,
-    autoSwing = true,
-    aimbotBall = true,
-    autoCatchBall = true,
-    predictBall = true,
-    lockBall = true,
-    skillAimAssist = true,
-    speedBoost = true,
-    infiniteJump = true,
-    autoDash = true,
-    teleportDodge = true,
-    noSlowdown = true,
-    godModeFake = true,
-    antiStun = true,
-    autoHeal = true,
-    autoRespawn = true,
-    shieldESP = true,
-    toggleUI = true,
-    fpsBooster = true,
-    ballESP = true,
-    playerESP = true,
-    customCrosshair = true,
-    hitboxExpander = true,
-}
+-- Serviços
+local Players = game:GetService("Players")
+local UserInputService = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
 
--- Funções
-local function autoParry()
-    -- Implementação do auto parry
-end
+local player = Players.LocalPlayer
 
-local function autoBlock()
-    -- Implementação do auto block
-end
+-- Variáveis que vão ser preenchidas quando o personagem existir
+local character, humanoid, hrp
+local parryTrack
 
-local function perfectBlock()
-    -- Implementação do perfect block
-end
+-- Função que configura referências ao personagem e carrega animação uma vez
+local function onCharacterAdded(char)
+    character = char
+    humanoid = character:WaitForChild("Humanoid")
+    hrp = character:WaitForChild("HumanoidRootPart")
 
-local function spamHit()
-    -- Implementação do spam hit
-end
-
-local function autoSwing()
-    -- Implementação do auto swing
-end
-
-local function aimbotBall()
-    -- Implementação do aimbot ball
-end
-
-local function autoCatchBall()
-    -- Implementação do auto catch ball
-end
-
-local function predictBall()
-    -- Implementação do predict ball
-end
-
-local function lockBall()
-    -- Implementação do lock ball
-end
-
-local function skillAimAssist()
-    -- Implementação do skill aim assist
-end
-
-local function speedBoost()
-    -- Implementação do speed boost
-end
-
-local function infiniteJump()
-    -- Implementação do infinite jump
-end
-
-local function autoDash()
-    -- Implementação do auto dash
-end
-
-local function teleportDodge()
-    -- Implementação do teleport dodge
-end
-
-local function noSlowdown()
-    -- Implementação do no slowdown
-end
-
-local function godModeFake()
-    -- Implementação do god mode fake
-end
-
-local function antiStun()
-    -- Implementação do anti stun
-end
-
-local function autoHeal()
-    -- Implementação do auto heal
-end
-
-local function autoRespawn()
-    -- Implementação do auto respawn
-end
-
-local function shieldESP()
-    -- Implementação do shield ESP
-end
-
-local function toggleUI()
-    -- Implementação do toggle UI
-end
-
-local function fpsBooster()
-    -- Implementação do FPS booster
-end
-
-local function ballESP()
-    -- Implementação do ball ESP
-end
-
-local function playerESP()
-    -- Implementação do player ESP
-end
-
-local function customCrosshair()
-    -- Implementação do custom crosshair
-end
-
-local function hitboxExpander()
-    -- Implementação do hitbox expander
-end
-
--- Inicialização
-local function init()
-    -- Verificar se as configurações estão salvas
-    if settings then
-        -- Carregar configurações salvas
-        for k, v in pairs(settings) do
-            if v then
-                -- Ativar a funcionalidade
-                _G[k] = true
-            end
+    -- Prepara a animação de parry uma única vez
+    local parryAnim = Instance.new("Animation")
+    parryAnim.Name = "AutoParryAnim"
+    parryAnim.AnimationId = "rbxassetid://SEU_ANIMATION_ID_AQUI" -- coloque o ID correto
+    -- carrega mas não reproduz ainda
+    if humanoid then
+        -- evita carregar múltiplas vezes
+        if not parryTrack then
+            local ok, track = pcall(function() return humanoid:LoadAnimation(parryAnim) end)
+            if ok then parryTrack = track end
         end
     end
 end
 
-init()
+player.CharacterAdded:Connect(onCharacterAdded)
+if player.Character then onCharacterAdded(player.Character) end
 
--- Loop principal
-while wait() do
-    -- Verificar se as funcionalidades estão ativadas
-    if _G.autoParry then
-        autoParry()
+-- Função de detecção (fazer raycast à frente do jogador)
+local function detectAttack()
+    if not hrp then return end
+
+    local rayParams = RaycastParams.new()
+    rayParams.FilterDescendantsInstances = {character}
+    rayParams.FilterType = Enum.RaycastFilterType.Blacklist
+
+    local origin = hrp.Position
+    local direction = hrp.CFrame.LookVector * 6 -- 6 studs à frente; ajuste conforme necessário
+
+    local result = workspace:Raycast(origin, direction, rayParams)
+    if result and result.Instance then
+        local hitPart = result.Instance
+        local model = hitPart:FindFirstAncestorOfClass("Model")
+        if model and model:FindFirstChildOfClass("Humanoid") and model ~= character then
+            -- Achei um jogador à frente — executo parry (apenas anim local)
+            if parryTrack then
+                parryTrack:Play()
+            end
+            -- Se o jogo exige um RemoteEvent para parry, você precisará reproduzir a chamada correta ao servidor aqui.
+            return true
+        end
     end
-    if _G.autoBlock then
-        autoBlock()
-    end
-    if _G.perfectBlock then
-        perfectBlock()
-    end
-    if _G.spamHit then
-        spamHit()
-    end
-    if _G.autoSwing then
-        autoSwing()
-    end
-    if _G.aimbotBall then
-        aimbotBall()
-    end
-    if _G.autoCatchBall then
-        autoCatchBall()
-    end
-    if _G.predictBall then
-        predictBall()
-    end
-    if _G.lockBall then
-        lockBall()
-    end
-    if _G.skillAimAssist then
-        skillAimAssist()
-    end
-    if _G.speedBoost then
-        speedBoost()
-    end
-    if _G.infiniteJump then
-        infiniteJump()
-    end
-    if _G.autoDash then
-        autoDash()
-    end
-    if _G.teleportDodge then
-        teleportDodge()
-    end
-    if _G.noSlowdown then
-        noSlowdown()
-    end
-    if _G.godModeFake then
-        godModeFake()
-    end
-    if _G.antiStun then
-        antiStun()
-    end
-    if _G.autoHeal then
-        autoHeal()
-    end
-    if _G.autoRespawn then
-        autoRespawn()
-    end
-    if _G.shieldESP then
-        shieldESP()
-    end
-    if _G.toggleUI then
-        toggleUI()
-    end
-    if _G.fpsBooster then
-        fpsBooster()
-    end
-    if _G.ballESP then
-        ballESP()
-    end
-    if _G.playerESP then
-        playerESP()
-    end
-    if _G.customCrosshair then
-        customCrosshair()
-    end
-    if _G.hitboxExpander then
-        hitboxExpander()
-    end
+    return false
 end
+
+-- Exemplo simples: usar tecla E para tentar parry (apenas demo)
+UserInputService.InputBegan:Connect(function(input, gpe)
+    if gpe then return end
+    if input.KeyCode == Enum.KeyCode.E then
+        detectAttack()
+    end
+end)
